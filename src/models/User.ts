@@ -1,21 +1,25 @@
 import { Schema, model, type Document } from 'mongoose';
 
-interface UserAttributes extends Document {
+interface IUser extends Document {
     username: string;
     email: string;
     thoughts: Schema.Types.ObjectId[];
     friends: Schema.Types.ObjectId[];
 }
 
-const userSchema = new Schema<UserAttributes>(
+const userSchema = new Schema<IUser>(
     {
         username: {
             type: String,
             required: true,
+            unique: true,
+            trim: true
         },
         email: {
             type: String,
             required: true,
+            unique: true,
+            match: [/^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/, 'Please fill a valid email address']
         },
         thoughts: [
             {
@@ -38,6 +42,10 @@ const userSchema = new Schema<UserAttributes>(
     },
 );
 
-const User = model<UserAttributes>('User', userSchema);
+userSchema.virtual('friendCount').get(function () {
+    return this.friends.length;
+});
+
+const User = model<IUser>('User', userSchema);
 
 export default User;
