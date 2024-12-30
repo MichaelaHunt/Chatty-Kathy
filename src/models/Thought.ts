@@ -30,10 +30,14 @@ const reactionSchema = new Schema<IReaction>(
             required: true
         },
         createdAt: {
-
+            type: Date,
+            default: Date.now,
         }
     },
     {
+        toJSON: {
+            getters: true,
+        },
         timestamps: true,
         _id: false
     },
@@ -49,7 +53,7 @@ const thoughtSchema = new Schema<IThought>(
         },
         createdAt: {
             type: Date,
-            default: Date.now(),
+            default: Date.now,
         },
         username: {
             type: String,
@@ -58,6 +62,9 @@ const thoughtSchema = new Schema<IThought>(
         reactions: [reactionSchema]
     },
     {
+        toJSON: {
+            getters: true,
+        },
         timestamps: true
     },
 );
