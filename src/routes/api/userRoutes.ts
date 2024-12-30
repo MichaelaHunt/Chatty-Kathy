@@ -1,5 +1,5 @@
 import { Router } from 'express';
-import { getAllUsers, createUser, getUserById, updateUser, deleteUser } from '../../controllers/userController';
+import { getAllUsers, createUser, getUserById, updateUser, deleteUser, addFriend, removeFriend } from '../../controllers/userController';
 
 
 const router = Router();
@@ -13,5 +13,9 @@ router.route('/:userId')
     .get(getUserById)
     .put(updateUser)
     .delete(deleteUser);
+
+router.route('/:userId/friends/:friendId')
+    .post(addFriend)
+    .delete(removeFriend);
 
 export { router as userRouter };

@@ -44,10 +44,9 @@ export const createUser = async (req: Request, res: Response) => {
 }
 
 export const updateUser = async (req: Request, res: Response) => {
-    const { id } = req.params.userId;
     const { updatedUser } = req.body;
     try {
-        const user = await User.findOneAndUpdate({_id: id}, {$set: updatedUser}, {new: true});
+        const user = await User.findOneAndUpdate({_id: req.params.userId}, {$set: updatedUser}, {new: true});
         //do I want to runValidators?
         if (user) {
             res.json(user);
@@ -62,12 +61,45 @@ export const updateUser = async (req: Request, res: Response) => {
 }
 
 export const deleteUser = async (req: Request, res: Response) => {
-    const { id } = req.params.userId;
     try {
-        const user = await User.findOneAndDelete({_id: id});
+        const user = await User.findOneAndDelete({_id: req.params.userId});
         if (user) {
             await Thought.deleteMany({_id: { $in: user.thoughts }});//Bonus here!
             res.json({ message: 'User and thoughts deleted!' });
+        } else {
+            res.status(404).json({message: 'No user with that ID!'});
+        }
+    } catch (error: any) {
+        res.status(500).json({
+            message: error.message
+        });
+    }
+}
+
+export const addFriend = async (req: Request, res: Response) => {
+    //I'm going to make this so that it is one way since it wasn't specified if it should be both ways like in most social media today
+    const { userId, friendId } = req.params;
+    try {
+        const user = await User.findOneAndUpdate({_id: userId}, {$addToSet: { friends: friendId }}, {new: true});
+        if (user) {
+            res.json(user);
+        } else {
+            res.status(404).json({ message: 'Could not update: No user with this id!' });
+        }
+    } catch (error: any) {
+        res.status(500).json({
+            message: error.message
+        });
+    }
+}
+
+export const removeFriend = async (req: Request, res: Response) => {
+    const { userId, friendId } = req.params;
+    try {
+        const user = await User.findOneAndDelete({_id: userId});
+        if (user) {
+            await User.updateMany({_id: friendId}, {$pull: {friends: userId}})//may not work
+            res.json({ message: 'User deleted and removed from friends lists.' });
         } else {
             res.status(404).json({message: 'No user with that ID!'});
         }
