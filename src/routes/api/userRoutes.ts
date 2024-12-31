@@ -6,7 +6,7 @@ const router = Router();
 // api/users
 router.route('/')
     .get(getAllUsers)
-    .post(createUser)
+    .post(createUser);
 
 // api/users/:userId
 router.route('/:userId')
