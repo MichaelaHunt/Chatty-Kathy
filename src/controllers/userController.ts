@@ -96,10 +96,9 @@ export const addFriend = async (req: Request, res: Response) => {
 export const removeFriend = async (req: Request, res: Response) => {
     const { userId, friendId } = req.params;
     try {
-        const user = await User.findOneAndDelete({_id: userId});
+         const user = await User.findOneAndUpdate({_id: userId}, {$pull: {friends: friendId}}, {new: true});
         if (user) {
-            await User.updateMany({_id: friendId}, {$pull: {friends: userId}})//may not work
-            res.json({ message: 'User deleted and removed from friends lists.' });
+            res.json(user);
         } else {
             res.status(404).json({message: 'No user with that ID!'});
         }

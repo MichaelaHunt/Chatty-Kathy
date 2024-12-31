@@ -92,9 +92,9 @@ export const addReaction = async(req: Request, res: Response) => {
 }
 
 export const removeReaction = async(req: Request, res: Response) => {
-    const { thoughtId } = req.params;
+    const { thoughtId, reactionId } = req.params;
     try {
-        const thought = await Thought.findOneAndDelete({_id: thoughtId});
+        const thought = await Thought.findOneAndUpdate({_id: thoughtId}, {$pull: {reactions: reactionId}}, {new: true});
         if (thought) {
             res.json(thought);
         } else {
