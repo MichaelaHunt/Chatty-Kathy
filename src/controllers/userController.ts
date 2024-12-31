@@ -1,6 +1,5 @@
 import { Request, Response } from 'express';
-import User from '../models/User';
-import Thought from '../models/Thought';
+import { User, Thought } from '../models/index';
 
 export const getAllUsers = async (_req: Request, res: Response) => {
     try {
@@ -47,7 +46,6 @@ export const updateUser = async (req: Request, res: Response) => {
     const { updatedUser } = req.body;
     try {
         const user = await User.findOneAndUpdate({_id: req.params.userId}, {$set: updatedUser}, {new: true});
-        //do I want to runValidators?
         if (user) {
             res.json(user);
         } else {
