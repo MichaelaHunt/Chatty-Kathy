@@ -31,9 +31,8 @@ export const getThoughtById = async(req: Request, res: Response) => {
 }
 
 export const createThought = async(req: Request, res: Response) => {
-    const { thought } = req.body;
     try {
-        const newThought = await Thought.create({thought});
+        const newThought = await Thought.create(req.body);
         res.json(newThought);
     } catch (error: any) {
         res.status(400).json({
@@ -43,10 +42,8 @@ export const createThought = async(req: Request, res: Response) => {
 }
 
 export const updateThought = async(req: Request, res: Response) => {
-    const { newThought } = req.body;
-    const { thoughtId } = req.params;
     try {
-        const thought = await Thought.findOneAndUpdate({_id: thoughtId}, {$set: newThought}, {new: true});
+        const thought = await Thought.findOneAndUpdate({_id: req.params.thoughtId}, {$set: req.body}, {new: true});
         if (thought) {
             res.json(thought);
         } else {

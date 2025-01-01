@@ -31,9 +31,8 @@ export const getUserById = async (req: Request, res: Response) => {
 }
 
 export const createUser = async (req: Request, res: Response) => {
-    const { user } = req.body;
     try {
-        const newUser = await User.create({user});
+        const newUser = await User.create(req.body);
         res.status(201).json(newUser);
     } catch (error: any) {
         res.status(400).json({
@@ -43,9 +42,8 @@ export const createUser = async (req: Request, res: Response) => {
 }
 
 export const updateUser = async (req: Request, res: Response) => {
-    const { updatedUser } = req.body;
     try {
-        const user = await User.findOneAndUpdate({_id: req.params.userId}, {$set: updatedUser}, {new: true});
+        const user = await User.findOneAndUpdate({_id: req.params.userId}, {$set: req.body}, {new: true});
         if (user) {
             res.json(user);
         } else {
