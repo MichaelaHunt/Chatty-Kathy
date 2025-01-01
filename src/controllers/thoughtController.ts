@@ -13,9 +13,8 @@ export const getAllThoughts = async(_req: Request, res: Response) => {
 }
 
 export const getThoughtById = async(req: Request, res: Response) => {
-    const { thoughtId } = req.params;
     try {
-        const thought = await Thought.findById({thoughtId});
+        const thought = await Thought.findById(req.params.thoughtId);
         if (thought) {
             res.json(thought);
         } else {
