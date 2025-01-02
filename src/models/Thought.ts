@@ -35,9 +35,6 @@ const reactionSchema = new Schema<IReaction>(
         }
     },
     {
-        toJSON: {
-            getters: true,
-        },
         timestamps: true,
         _id: false
     },

@@ -71,10 +71,8 @@ export const deleteThought = async(req: Request, res: Response) => {
 }
 
 export const addReaction = async(req: Request, res: Response) => {
-    const { thoughtId } = req.params;
     try {
-        const { reaction } = req.body;
-        const thought = await Thought.findOneAndUpdate({_id: thoughtId}, {$addToSet: {reactions: reaction}}, {new: true});
+        const thought = await Thought.findOneAndUpdate({_id: req.params.thoughtId}, {$addToSet: {reactions: req.body}}, {new: true});
         if (thought) {
             res.json(thought);
         } else {
@@ -90,7 +88,7 @@ export const addReaction = async(req: Request, res: Response) => {
 export const removeReaction = async(req: Request, res: Response) => {
     const { thoughtId, reactionId } = req.params;
     try {
-        const thought = await Thought.findOneAndUpdate({_id: thoughtId}, {$pull: {reactions: reactionId}}, {new: true});
+        const thought = await Thought.findOneAndUpdate({_id: thoughtId}, {$pull: {reactions: {reactionId: reactionId}}}, {new: true});
         if (thought) {
             res.json(thought);
         } else {
