@@ -104,3 +104,14 @@ export const removeFriend = async (req: Request, res: Response) => {
         });
     }
 }
+
+export const deleteAllUsers = async(_req: Request, res: Response) => {//Added this on my own for presentation purposes. Deletes all users.
+    try {
+        await User.deleteMany({});
+        res.json({message: "All Users deleted!"});
+    } catch (error: any) {
+        res.status(400).json({
+            message: error.message
+        });
+    }
+}

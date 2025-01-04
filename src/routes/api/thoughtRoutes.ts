@@ -1,12 +1,13 @@
 import { Router } from 'express';
-import { addReaction, createThought, deleteThought, getAllThoughts, getThoughtById, removeReaction, updateThought } from '../../controllers/thoughtController.js';
+import { addReaction, createThought, deleteAllThoughts, deleteThought, getAllThoughts, getThoughtById, removeReaction, updateThought } from '../../controllers/thoughtController.js';
 
 const router = Router();
 
 // api/thoughts
 router.route('/')
     .get(getAllThoughts)
-    .post(createThought);
+    .post(createThought)
+    .delete(deleteAllThoughts);
 
 // api/thoughts/:thoughtId
 router.route('/:thoughtId')
