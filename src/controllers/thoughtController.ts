@@ -1,5 +1,5 @@
 import { Request, Response } from 'express';
-import { Thought } from '../models/index.js';
+import { Thought, User } from '../models/index.js';
 
 export const getAllThoughts = async(_req: Request, res: Response) => {
     try {
@@ -32,6 +32,8 @@ export const getThoughtById = async(req: Request, res: Response) => {
 export const createThought = async(req: Request, res: Response) => {
     try {
         const newThought = await Thought.create(req.body);
+        //add to the user's thoughts array next
+        await User.findOneAndUpdate({_id: req.body.userId}, {$addToSet: {thoughts: newThought._id}});
         res.json(newThought);
     } catch (error: any) {
         res.status(400).json({
